@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Weather</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script>
+        function gettingJSON() {
+
+            let locationTxt = $("#location").val(); 
+            let locationData = locationTxt.split(",");
+            let locationName = locationData[0];
+            let postCode = locationData[1];
+
+            $.getJSON("http://api.openweathermap.org/data/2.5/weather?q=" + locationName + "&zip=" + postCode + "&APPID=0451703d3c7330eee0390eac6e938267&units=metric", function (json) {
+
+                let newResult = {};
+                let dt = new Date(json.dt * 1000);
+                let hr = dt.getHours();
+                let m = "0" + dt.getMinutes();
+                let s = "0" + dt.getSeconds();
+                let formattedDateTime = hr + ':' + m.substr(-2) + ':' + s.substr(-2);
+
+                newResult.temp_max = json.main.temp_max;
+                newResult.temp_min = json.main.temp_min;;
+                newResult.current_time = formattedDateTime
+                console.log(newResult)
+
+            }).error(function () { alert("Please enter valid location"); })
+        }
+    </script>
+</head>
+
+<body>
+    <input id="location" placeholder="Enter Location" />
+    <button id="getIt" onclick="gettingJSON()">Get weather info</button>
+</body>
+
+</html>
